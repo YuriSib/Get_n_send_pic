@@ -77,27 +77,9 @@ class ExcelWork:
             wb.save(table_path_)
 
 
-class WorkToPic:
-    def __init__(self, server_position, path_table_dir):
-        self.server_position = server_position
-        self.path_table_dir = path_table_dir
-        self.list_tables = []
-
-    def table_choice(self):
-        files = os.listdir(self.path_table_dir)
-        self.list_tables = [file for file in files if ".xlsx"]
-
-        return self.list_tables
-
-    def save(self):
-        for table in self.list_tables:
-            ew = ExcelWork(table)
-            link_dict = ew.get_links()
-
-
 if __name__ == "__main__":
     table_dir_path = 'таблицы'
-    photo_dir_path_ = 'hosting/polezniemelochi.ru/wp-content/uploads/photo'
+    photo_dir_path_ = r'hosting\polezniemelochi.ru\wp-content\uploads\photo'
     ew_ = ExcelWork()
     tables_list = ew_.find_file(table_dir_path)
     for table_path in tables_list:
