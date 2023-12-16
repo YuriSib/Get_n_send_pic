@@ -21,7 +21,7 @@ class ExcelWork:
     @staticmethod
     def photo_saver(url_, name, path=None):
         response = requests.get(url_)
-        with open(rf'{path}\{name}.jpg', 'wb') as f:
+        with open(f'{path}', 'wb') as f:
             f.write(response.content)
 
     def find_file(self, dir_path_):
@@ -79,7 +79,7 @@ class ExcelWork:
 
 if __name__ == "__main__":
     table_dir_path = 'таблицы'
-    photo_dir_path_ = r'hosting\polezniemelochi.ru\wp-content\uploads\photo'
+    photo_dir_path_ = 'hosting/polezniemelochi.ru/wp-content/uploads/photo'
     ew_ = ExcelWork()
     tables_list = ew_.find_file(table_dir_path)
     for table_path in tables_list:
