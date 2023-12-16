@@ -12,12 +12,12 @@ class ExcelWork:
 
     @staticmethod
     def find_col_num(col_name, work_sheet):
-        link_col_num = -1
+        col_num = -1
         for col in work_sheet.iter_cols(min_row=1, max_row=1, values_only=True):
-            link_col_num += 1
+            col_num += 1
             if col_name in col[0]:
                 break
-        return link_col_num
+        return col_num
 
     def get_links(self):
         wb = openpyxl.load_workbook(self.table_path)
@@ -51,7 +51,6 @@ class ExcelWork:
                 link_list = [f"{key}-{num}" for num in range(1, amount_link + 1)]
                 self.new_link_dict[key] = link_list
 
-            for
 
 
 class PicSave:
