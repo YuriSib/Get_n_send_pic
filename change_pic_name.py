@@ -21,7 +21,7 @@ class ExcelWork:
     @staticmethod
     def photo_saver(url_, name, path=None):
         response = requests.get(url_)
-        with open(f'{path}/{name}.jpg', 'wb') as f:
+        with open(rf'{path}\{name}.jpg', 'wb') as f:
             f.write(response.content)
 
     def find_file(self, dir_path_):
