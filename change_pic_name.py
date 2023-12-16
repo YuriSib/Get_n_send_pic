@@ -79,7 +79,7 @@ class ExcelWork:
 
 if __name__ == "__main__":
     table_dir_path = 'таблицы'
-    photo_dir_path_ = 'hosting/polezniemelochi.ru/wp-content/uploads/photo'
+    photo_dir_path_ = 'polezniemelochi.ru/wp-content/uploads/photo'
     ew_ = ExcelWork()
     tables_list = ew_.find_file(table_dir_path)
     for table_path in tables_list:
