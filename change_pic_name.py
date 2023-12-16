@@ -1,12 +1,11 @@
-import urllib.request
-import pickle
 import os
 import openpyxl
+import requests
 
 
 class ExcelWork:
-    def __init__(self, table_path):
-        self.table_path = table_path
+    def __init__(self):
+        self.list_tables = []
         self.old_link_dict = {}
         self.new_link_dict = {}
 
@@ -19,8 +18,20 @@ class ExcelWork:
                 break
         return col_num
 
-    def get_links(self):
-        wb = openpyxl.load_workbook(self.table_path)
+    @staticmethod
+    def photo_saver(url_, name, path=None):
+        response = requests.get(url_)
+        with open(f'{path}/{name}.jpg', 'wb') as f:
+            f.write(response.content)
+
+    def find_file(self, dir_path_):
+        files = os.listdir(dir_path_)
+        self.list_tables = [file for file in files if ".xlsx"]
+
+        return self.list_tables
+
+    def get_links(self, table_path_):
+        wb = openpyxl.load_workbook(table_path_)
         ws = wb.active
 
         link_col_num = self.find_col_num('фото', ws)
@@ -38,38 +49,32 @@ class ExcelWork:
             self.old_link_dict[product_code] = product_links
         return self.old_link_dict
 
-    def links_rename(self):
+    def links_rename(self, table_path_, photo_dir_path=None):
         if self.old_link_dict:
-            wb = openpyxl.load_workbook(self.table_path)
+            wb = openpyxl.load_workbook(table_path_)
             ws = wb.active
 
             link_col_num = self.find_col_num('фото', ws)
-            code_col_num = self.find_col_num('Код товара', ws)
 
+            row = 2
             for key, values in self.old_link_dict.items():
+                if not key:
+                    break
+                if not values:
+                    continue
                 amount_link = len(values)
+
                 link_list = [f"{key}-{num}" for num in range(1, amount_link + 1)]
+                num = 1
+                for url in values:
+                    self.photo_saver(url, f"{key}-{num}", photo_dir_path)
+                    num += 1
+
                 self.new_link_dict[key] = link_list
-
-
-
-class PicSave:
-    def __init__(self, url_, name):
-        self.url_ = url_
-        self.name = name
-
-    def photo_saver(self):
-        try:
-            urllib.request.urlopen(self.url_)
-        except urllib.error.URLError as e:
-            print("Ошибка при скачивании фото:", e)
-        else:
-            try:
-                with open(f'{self.name}.jpg', 'wb') as f:
-                    f.write(urllib.request.urlopen(self.url_).read())
-                    print("Фото успешно скачано!")
-            except Exception as e:
-                print(f"Ошибка при скачивании фото: {e}")
+                link_list = [f"https://polezniemelochi.ru/wp-content/uploads/photo/{link}" for link in link_list]
+                ws.cell(row=row, column=link_col_num + 1).value = ', '.join(link_list)
+                row += 1
+            wb.save(table_path_)
 
 
 class WorkToPic:
@@ -91,8 +96,15 @@ class WorkToPic:
 
 
 if __name__ == "__main__":
-    table_path_ = 'Паяльники.xlsx'
-    ew_ = ExcelWork(table_path_)
-    link_dict_ = ew_.get_links()
-    ew_.links_rename()
+    table_dir_path = 'таблицы'
+    photo_dir_path_ = 'hosting/polezniemelochi.ru/wp-content/uploads/photo'
+    ew_ = ExcelWork()
+    tables_list = ew_.find_file(table_dir_path)
+    for table_path in tables_list:
+        try:
+            link_dict_ = ew_.get_links(f"{table_dir_path}/{table_path}")
+            ew_.links_rename(f"{table_dir_path}/{table_path}", photo_dir_path=photo_dir_path_)
+        except TypeError as E:
+            print(f"An error: ####{E}#### \n occurred while processing table {table_path}.\nThe iteration was skipped!")
+
 
