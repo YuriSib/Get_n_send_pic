@@ -21,7 +21,7 @@ class ExcelWork:
     @staticmethod
     def photo_saver(url_, name, path=None):
         response = requests.get(url_)
-        with open(f'{path}', 'wb') as f:
+        with open(f'{name}', 'wb') as f:
             f.write(response.content)
 
     def find_file(self, dir_path_):
@@ -67,7 +67,7 @@ class ExcelWork:
                 link_list = [f"{key}-{num}" for num in range(1, amount_link + 1)]
                 num = 1
                 for url in values:
-                    self.photo_saver(url, f"{key}-{num}", photo_dir_path)
+                    self.photo_saver(url, f"{key}-{num}")
                     num += 1
 
                 self.new_link_dict[key] = link_list
