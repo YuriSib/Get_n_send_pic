@@ -79,13 +79,13 @@ class ExcelWork:
 
 if __name__ == "__main__":
     table_dir_path = 'таблицы'
-    photo_dir_path_ = 'polezniemelochi.ru/wp-content/uploads/photo'
+    # photo_dir_path_ = 'polezniemelochi.ru/wp-content/uploads/photo'
     ew_ = ExcelWork()
     tables_list = ew_.find_file(table_dir_path)
     for table_path in tables_list:
         try:
             link_dict_ = ew_.get_links(f"{table_dir_path}/{table_path}")
-            ew_.links_rename(f"{table_dir_path}/{table_path}", photo_dir_path=photo_dir_path_)
+            ew_.links_rename(f"{table_dir_path}/{table_path}")
         except TypeError as E:
             print(f"An error: ####{E}#### \n occurred while processing table {table_path}.\nThe iteration was skipped!")
 
