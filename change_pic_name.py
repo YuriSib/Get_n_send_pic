@@ -64,10 +64,10 @@ class ExcelWork:
                     continue
                 amount_link = len(values)
 
-                link_list = [f"{key}-{num}" for num in range(1, amount_link + 1)]
+                link_list = [f"{key[3:]}-{num}" for num in range(1, amount_link + 1)]
                 num = 1
                 for url in values:
-                    self.photo_saver(url, f"{key}-{num}")
+                    self.photo_saver(url, f"{key[3:]}-{num}")
                     num += 1
 
                 self.new_link_dict[key] = link_list
